@@ -22,8 +22,17 @@ const enquiry = new mongoose.Schema({
     },{versionKey:false}
 )
 
+const project = new mongoose.Schema({
+    name: String,
+    description: String,
+    img:String,
+    },{versionKey:false}
+)
+
 const skillModel = mongoose.model('Skill',skill)
 const enquiryModel = mongoose.model('Enquiry',enquiry)
+const projectModel = mongoose.model('Project',project)
+
 
 
 function admVery(req,res){
@@ -59,6 +68,34 @@ app.post('/skills',(req,res)=>{
         console.log('unauthorized user')
 
     }
+})
+
+// project ctl
+app.post('/project',(req,res)=>{
+    console.log(req)
+    res.send('you have send requsst with'+req.body)
+})
+
+
+
+app.post('/project/create',(req,res)=>{
+    vary = admVery(req.get('token'))
+    if(very){
+        var newProject =new projectModel({
+            name:req.body.name,
+            description:req.body.description,
+            img:req.body.imgUrl 
+        })
+        newProject.save((err,data)=>{
+            if(err) res.send("saving errors")
+            console.log(data)
+        })
+        res.send('saved success')
+
+    }else{
+        res.send('your are not authorised')
+    }
+
 })
 
 // eqnuiry ctl
