@@ -4,6 +4,9 @@ var mongoose = require('mongoose'),
  app=express();
  require('dotenv').config();
 
+
+var queryHandler = require('./src/handlers/queryHandler')
+
  app.use(bodyParser.json());
 
  //support parsing of application/x-www-form-urlencoded post data
@@ -11,6 +14,7 @@ var mongoose = require('mongoose'),
 
  mongoose.connect('mongodb://localhost/'+process.env.DB_NAME, {useNewUrlParser: true});
 // router section
+
 const skill = new mongoose.Schema({
     name: String,
     yearOfExp: Number,
@@ -49,6 +53,11 @@ function admVery(req,res){
 app.get('/',function(req,res){
     res.send('hello world')
 })
+
+//query api
+app.get('/:query?',queryHandler)
+
+
 // skill ctl
 app.get('/skills',(req,res)=>{
     const data = skillModel;
@@ -113,5 +122,7 @@ app.post('/enquiry',(req,res)=>{
     res.send('enquiry acquired')
 })
 
-
- app.listen(3002);
+const port  =3002
+app.listen(port,()=>{
+    console.log('listening port:',port);
+});
